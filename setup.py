@@ -2,10 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name="ready2order-api-wrapper",
-    version="0.1.4",
-    packages=find_packages(),
+    version="0.1.5",  # Incremented version number
+    packages=find_packages(),  # Automatically discover all modules
     install_requires=[
-        "requests"
+        "requests",
+        "pandas",  # Include pandas since it's used in your modules
     ],
     author="Joan Arau",
     author_email="arau.j@zinnfiguren.de",
