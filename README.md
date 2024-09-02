@@ -19,13 +19,24 @@ pip install ready2order-api-wrapper
 
 ## Usage Example
 
-```python
-from ready2order_api.api import Ready2OrderAPI as r2o
+from ready2order_api.api import Bill, Company, Product
 
-api = r2o("YOUR_ACCOUNT_TOKEN")
+account_token = "your_account_token_here"
 
-print(api.get_products())
-```
+# Working with bills
+bill = Bill(account_token)
+bills_df = bill.get_all_bills()
+print(bills_df)
+
+# Working with company info
+company = Company(account_token)
+company_info = company.get_company_info()
+print(company_info)
+
+# Working with products
+product = Product(account_token)
+products_df = product.get_products()
+print(products_df)
 
 
 ## How to get your account token
