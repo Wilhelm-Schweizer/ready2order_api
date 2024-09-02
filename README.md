@@ -19,6 +19,7 @@ pip install ready2order-api-wrapper
 
 ## Usage Example
 
+```python
 from ready2order_api.api import Bill, Company, Product
 
 account_token = "your_account_token_here"
@@ -37,7 +38,7 @@ print(company_info)
 product = Product(account_token)
 products_df = product.get_products()
 print(products_df)
-
+```
 
 ## How to get your account token
 
