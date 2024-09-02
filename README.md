@@ -28,3 +28,17 @@ print(api.get_products())
 ```
 
 
+## How to get your account token
+
+To get your developer token go to [Ready2Order API](https://ready2order.com/en/api/), scroll to the bottom of the page and submit your email address to request the API token.
+
+Now run the following code to get your account token:
+
+```python
+from ready2order_api import get_acct_token
+
+get_acct_token.get_account_token("YOUR_DEVELOPER_TOKEN")
+
+
+```
+Now click on the URL starting with: https://my.ready2order.com/api/grantAccess/..., enter your login credentials and click login. You will be redirected to a blank page. Copy the account token from the URL and save it.
