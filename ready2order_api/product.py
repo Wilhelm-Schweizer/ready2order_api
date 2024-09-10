@@ -74,11 +74,20 @@ class Product:
         :param product_data: A dictionary with the product's updated data.
         :return: The updated product if successful, None otherwise.
         """
+
+        flds = {'product_name':str,'product_price':str,'product_vat':str}
+
+
         # Get current product data
         products_old = self.get_products(as_dataframe=True)
 
         # Extract product item number and ID from old products
         products_old_merge = products_old[['product_itemnumber', 'product_id']]
+
+        for fld in flds:
+            products_old[fld] = products_old[fld].astype(flds[fld])
+
+
 
         # Merge old and new data on product_itemnumber to match existing products with the new data
         df_new = products_old_merge.merge(product_data, on='product_itemnumber', how='right')
@@ -91,7 +100,7 @@ class Product:
         # Remove products that were not found in the old list
         df_new = df_new.dropna(subset=['product_id'])
         df_new['product_id'] = df_new['product_id'].astype(int)
-
+        response = None
         # Loop over the rows of new data to update each product
         for i, r in df_new.iterrows():
             product_id = r['product_id']
@@ -105,6 +114,7 @@ class Product:
             # Remove product_id and product_itemnumber from the comparison (since we don't want to update them)
             new_product_data.pop('product_id', None)
             new_product_data.pop('product_itemnumber', None)
+            new_product_data.pop('productgroup_id', None)
 
             # Compare old and new data (only update if data is different)
             data_to_update = {key: new_product_data[key] for key in new_product_data if
@@ -128,7 +138,7 @@ class Product:
             else:
                 print(f"Error {response.status_code}: {response.text}")
 
-        return {'response': response.json(), 'prod_not_found': prod_not_found['product_itemnumber'].values}
+        return {'response': response, 'prod_not_found': prod_not_found['product_itemnumber'].values}
 
 
     def create_products(self, df):
