@@ -84,13 +84,19 @@ class Product:
         # print(products_old)
         # print(product_data)
 
-        product_data = product_data.rename(columns={'ArtNr_Neu':'product_itemnumber'})
+
         products_old = products_old[['product_itemnumber','product_id']]
 
 
-        df_new = products_old.merge(product_data, on='product_itemnumber', how='left')
+        df_new = products_old.merge(product_data, on='product_itemnumber', how='right')
 
+        prod_not_found = df_new[df_new['product_id'].isnull()]
 
+        if len(prod_not_found) > 0:
+            print(f"Products not found: {prod_not_found['product_itemnumber'].values}")
+
+        df_new = df_new.dropna(subset=['product_id'])
+        df_new['product_id'] = df_new['product_id'].astype(int)
 
         # print(df_new)
         # breakpoint()
@@ -110,6 +116,9 @@ class Product:
             else:
                 print(f"Error {response.status_code}: {response.text}")
                 # return None
+
+        return {'response':response.json(),'prod_not_found':prod_not_found['product_itemnumber'].values}
+
 
     def create_products(self, df):
         """
