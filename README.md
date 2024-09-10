@@ -40,7 +40,6 @@ products_df = product.get_products()
 print(products_df)
 ```
 
-
 ## How to get your account token
 
 To get your developer token go to [Ready2Order API](https://ready2order.com/en/api/), scroll to the bottom of the page and submit your email address to request the API token.
