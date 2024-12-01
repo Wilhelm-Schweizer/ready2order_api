@@ -10,23 +10,36 @@ class Bill:
             "Content-Type": "application/json"
         }
 
-    def get_all_bills(self, as_dataframe=True):
+    def get_all_bills(self, as_dataframe=True, limit=100):
         """
-        Fetch and return all bills from the API.
+        Fetch and return all bills from the API using pagination.
 
         :param as_dataframe: bool, whether to return the data as a DataFrame (default is True).
-        :return: pd.DataFrame or dict, a DataFrame containing all bills data or raw JSON.
+        :param limit: int, the number of records per page (default is 100).
+        :return: pd.DataFrame or list, a DataFrame containing all bills data or raw JSON.
         """
         url = f"{self.base_url}/document/invoice"
-        response = requests.get(url, headers=self.headers)
-        if response.status_code == 200:
-            data = response.json()
-            if as_dataframe:
-                return pd.DataFrame(data['invoices'])
-            return data
-        else:
-            print(f"Error {response.status_code}: {response.text}")
-            return None
+        offset = 0
+        all_bills = []
+
+        while True:
+            params = {"limit": limit, "offset": offset}
+            response = requests.get(url, headers=self.headers, params=params)
+
+            if response.status_code == 200:
+                data = response.json()
+                invoices = data.get('invoices', [])
+                all_bills.extend(invoices)
+                if len(invoices) < limit:  # No more data to fetch
+                    break
+                offset += limit
+            else:
+                print(f"Error {response.status_code}: {response.text}")
+                return None
+
+        if as_dataframe:
+            return pd.DataFrame(all_bills)
+        return all_bills
 
     def get_bill_by_id(self, invoice_id, as_dataframe=True):
         """
@@ -59,3 +72,6 @@ class Bill:
         else:
             print(f"Error {response.status_code}: {response.text}")
             return None
+
+if __name__ == '__main__':
+    pass

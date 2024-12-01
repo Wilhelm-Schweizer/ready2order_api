@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ready2order-api-wrapper",
-    version="0.1.9",  # Incremented version number
+    version="0.1.10",  # Incremented version number
     packages=find_packages(),  # Automatically discover all modules
     install_requires=[
         "requests",
